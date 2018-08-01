@@ -6,6 +6,9 @@
 #include <cmath>
 #include <complex>
 #include <iostream>
+#include "ADTestConfig.h"
+
+namespace Ticon {
 
 template<typename T>
 T absvalue(const T& val)
@@ -24,6 +27,13 @@ std::complex<T> absvalue(const std::complex<T>& val)
 
   return val2;
 }
+/*
+template <typename T>
+bool operator<(const std::complex<T>& val1, const std::complex<T>& val2)
+{
+  return val1.real() < val2.real();
+}
+*/
 
 template <typename T>
 T max(const T& val1, const T& val2)
@@ -40,5 +50,6 @@ std::complex<T> max(const std::complex<T>&val1, const std::complex<T>& val2)
     return val2;
 }
 
+} // namespace ticon
 
 #endif

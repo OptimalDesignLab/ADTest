@@ -8,6 +8,9 @@
 #include <cmath>  // sqrt
 #include <complex> // complex sqrt
 #include "complexify.h"
+#include "ADTestConfig.h"
+
+namespace Ticon{
 
 //-----------------------------------------------------------------------------
 // declarations
@@ -249,5 +252,5 @@ Tsol calcPressure(Tsol* q)
 
 // Instantiate commonly used templates?
 
-
+} // namespace
 #endif

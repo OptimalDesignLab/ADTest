@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
   double aux_vars[0];
   double nrm[] = {1.0, 1.0};
   double flux[4];
-  RoeSolver(qL, qR, aux_vars, nrm, flux);
+  Ticon::RoeSolver(qL, qR, aux_vars, nrm, flux);
 
   std::cout << "flux = [";
   for (int i=0; i < 4; ++i)
@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
   std::complex<double> aux_varsc[0];
   std::complex<double> fluxc[4];
 
-  RoeSolver(qLc, qRc, aux_varsc, nrm, fluxc);
+  Ticon::RoeSolver(qLc, qRc, aux_varsc, nrm, fluxc);
 
   std::cout << "fluxc = [";
   for (int i=0; i < 4; ++i)

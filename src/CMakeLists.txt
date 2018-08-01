@@ -19,12 +19,9 @@ set (CMAKE_CXX_STANDARD 11)
 # look there for it
 include_directories("${PROJECT_BINARY_DIR}")
 
-# get the stuff in the euler directory, both header and code
-include_directories("${PROJECT_SOURCE_DIR}/euler")
+# include all components of this project
 add_subdirectory(euler "${PROJECT_BINARY_DIR}/euler")
-
-#include_directories("${PROJECT_SOURCE_DIR}/utils")
-#add_subdirectory(utils)
+add_subdirectory(utils "${PROJECT_BINARY_DIR}/utils")
 
 
 
