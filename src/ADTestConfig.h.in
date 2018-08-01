@@ -1,0 +1,3 @@
+// configuration options from CMake
+#define ADTest_VERSION_MAJOR @ADTest_VERSION_MAJOR@
+#define ADTest_VERSION_MINOR @ADTest_VERSION_MINOR@
