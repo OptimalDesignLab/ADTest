@@ -20,5 +20,18 @@ int main(int argc, char* argv[])
     std::cout << flux[i] << ", ";
   std::cout << "]" << std::endl;
 
+  std::complex<double> qLc[] = {1.0, 2.0, 3.0, 7.0};
+  std::complex<double> qRc[] = {1.0, 2.0, 3.0, 7.0};
+  std::complex<double> aux_varsc[0];
+  std::complex<double> fluxc[4];
+
+  RoeSolver(qLc, qRc, aux_varsc, nrm, fluxc);
+
+  std::cout << "fluxc = [";
+  for (int i=0; i < 4; ++i)
+    std::cout << fluxc[i] << ", ";
+  std::cout << "]" << std::endl;
+
+
   return 0;
 }

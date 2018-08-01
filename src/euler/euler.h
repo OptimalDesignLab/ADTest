@@ -153,9 +153,9 @@ void calcSAT(Tsol* roe_vars, Tsol* dq, Tmsh* nrm, Tres* sat)
   // approach zero. This has a possibility of creating numerical difficulties.
   // As a result, the eigen values are limited by the following expressions.
 
-  lambda1 = 0.5*(tau*std::max(absvalue(lambda1),sat_Vn *rhoA) - lambda1);
-  lambda2 = 0.5*(tau*std::max(absvalue(lambda2),sat_Vn *rhoA) - lambda2);
-  lambda3 = 0.5*(tau*std::max(absvalue(lambda3),sat_Vl *rhoA) - lambda3);
+  lambda1 = 0.5*(tau*max(absvalue(lambda1),sat_Vn *rhoA) - lambda1);
+  lambda2 = 0.5*(tau*max(absvalue(lambda2),sat_Vn *rhoA) - lambda2);
+  lambda3 = 0.5*(tau*max(absvalue(lambda3),sat_Vl *rhoA) - lambda3);
 
 
   auto dq1 = dq[0];
