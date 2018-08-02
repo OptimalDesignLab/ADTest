@@ -1,6 +1,6 @@
 // Euler physics funcitons
-#ifndef EULER_H
-#define EULER_H
+#ifndef EULER_PRIMAL_H
+#define EULER_PRIMAL_H
 
 // used for defining statically sized arrays
 #define MAX_DOFPERNODE 5
