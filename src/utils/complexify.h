@@ -8,7 +8,9 @@
 #include <iostream>
 #include "ADTestConfig.h"
 
+
 namespace Ticon {
+
 
 template<typename T>
 T absvalue(const T& val)

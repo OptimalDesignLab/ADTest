@@ -4,6 +4,6 @@
 #define EULER_H
 
 #include "euler_primal.h"
-#include "euler_diff.h"
+//#include "euler_diff.h"
 
 #endif
