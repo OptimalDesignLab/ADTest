@@ -4,12 +4,22 @@
  * `src/utils`: some utility functions, including `complexify.h` and `ind` for arrays
  * `src/euler`: currently the Roe solver, both primal and forward-mode differentiated version
 
+## Code Facilities
+
+Use the `TIME` macro for timing things.  Note that the macro returns an object
+which can be printed to an `std::ostream`.
+
+```c++
+using namespace Ticon;  // important!
+std::cout << "elapsed time = " << TIME(setCourseAndSpeed(heading, speed) << std::endl;
+```
 
 # C++ Notes
 
  * Put *everything* in a namespace
  * Do not indent code inside a namespace
  * Currently we use raw pointers rather than `std::vector` or `std::array`.  This helps with Julia compatability, but should be reconsidered in the future (boundschecking would be nice).
+ * use `auto` whenever possible
 
 # CMake Notes
 

@@ -4,8 +4,10 @@
 #include "euler.h"
 #include "utils.h"
 
+using namespace Ticon;
 int main(int argc, char* argv[])
 {
+
   std::cout << "hello world" << std::endl;
   std::cout << "ADTest version " << ADTest_VERSION_MAJOR << "." << ADTest_VERSION_MINOR << std::endl;
 
@@ -14,10 +16,15 @@ int main(int argc, char* argv[])
   double aux_vars[0];
   double nrm[] = {1.0, 1.0};
   double flux[4];
-  Ticon::RoeSolver(qL, qR, aux_vars, nrm, flux);
+  std::cout << "elapsed time = " << TIME(Ticon::RoeSolver(qL, qR, aux_vars, nrm, flux)) << std::endl;
 
   std::cout << "flux = ";
   Ticon::printArray(std::cout, flux, 4);
+//  std::cout << "elapsed time = " << std::chrono::duration<double, std::milli>(etime).count() << std::endl;
+
+//  std::cout << "elapsed time = " << etime << std::endl;
+//  Ticon::printEtime(std::cout, etime);
+
 /*
   std::cout << "flux = [";
   for (int i=0; i < 4; ++i)
