@@ -11,7 +11,7 @@ which can be printed to an `std::ostream`.
 
 ```c++
 using namespace Ticon;  // important!
-std::cout << "elapsed time = " << TIME(setCourseAndSpeed(heading, speed) << std::endl;
+std::cout << "elapsed time = " << TIME(setCourseAndSpeed(heading, speed)) << std::endl;
 ```
 
 # C++ Notes
