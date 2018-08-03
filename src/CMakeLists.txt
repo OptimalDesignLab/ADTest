@@ -28,6 +28,7 @@ add_subdirectory(utils "${PROJECT_BINARY_DIR}/utils")
 # build
 add_executable(Tutorial tutorial.cc)
 target_link_libraries(Tutorial Euler)
+target_link_libraries(Tutorial Utils)
 
 # install
 install(TARGETS Tutorial DESTINATION bin)
