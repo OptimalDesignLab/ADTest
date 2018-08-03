@@ -9,11 +9,11 @@
 
  * Put *everything* in a namespace
  * Do not indent code inside a namespace
- * 
+ * Currently we use raw pointers rather than `std::vector` or `std::array`.  This helps with Julia compatability, but should be reconsidered in the future (boundschecking would be nice).
 
 # CMake Notes
 
-prefer `target_*` functions to `*`, ie. `target_include_directories` to `include_directories.
+prefer `target_*` functions to `*`, ie. `target_include_directories` to `include_directories`.
 The idea is for each target to tell anyone who tries to link to it what they need to do (what library to link to, where the header files are found etc.)
 The top level `CMakeLists.txt` should use `include` to get the `CMakeLists.txt`
 of all components of the package.
