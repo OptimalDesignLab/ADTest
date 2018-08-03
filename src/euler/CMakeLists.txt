@@ -12,8 +12,14 @@ target_include_directories(Euler INTERFACE
   $<INSTALL_INTERFACE:include/euler>
   )
 
+set(HEADERS
+  euler.h
+  euler_primal.h
+  euler_diff.h
+)
+
 target_link_libraries(Euler INTERFACE Utils)
 
 # install
 #install(TARGETS Euler DESTINATION lib)
-install(FILES euler.h DESTINATION include/euler)
+install(FILES ${HEADERS} DESTINATION include/euler)

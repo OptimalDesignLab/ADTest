@@ -32,6 +32,10 @@ int main(int argc, char* argv[])
     std::cout << fluxc[i] << ", ";
   std::cout << "]" << std::endl;
 
+  // differentiated version
+  double flux_dotL[4*4];
+  double flux_dotR[4*4];
+  Ticon::RoeSolver_diff(qL, qR, aux_vars, nrm, flux_dotL, flux_dotR);
 
   return 0;
 }
