@@ -3,6 +3,7 @@
 #include "ADTestConfig.h"
 #include "euler.h"
 #include "utils.h"
+#include "test.h"
 
 using namespace Ticon;
 int main(int argc, char* argv[])
@@ -55,5 +56,13 @@ int main(int argc, char* argv[])
   std::cout << "flux_dotL =\n";
   Ticon::printArray(std::cout, flux_dotL, 4, 4);
 
+  // big test
+  TestAD<double, double, double> testdata(10, 100000);
+  testRoeSolver(testdata);
+  testRoeSolver_diff(testdata);
+
   return 0;
 }
+
+
+

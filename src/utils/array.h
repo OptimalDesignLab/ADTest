@@ -2,6 +2,8 @@
 #ifndef ARRAY_H
 #define ARRAY_H
 
+#include <iostream>
+
 namespace Ticon {
 
 // index computation (to make 1D array look like multi-d-array

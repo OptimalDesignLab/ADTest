@@ -20,6 +20,7 @@ std::cout << "elapsed time = " << TIME(setCourseAndSpeed(heading, speed)) << std
  * Do not indent code inside a namespace
  * Currently we use raw pointers rather than `std::vector` or `std::array`.  This helps with Julia compatability, but should be reconsidered in the future (boundschecking would be nice).
  * use `auto` whenever possible
+ * Always initialize data members of classes (especially those for which the default initialization is undefined)
 
 # CMake Notes
 

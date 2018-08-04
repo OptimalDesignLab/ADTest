@@ -26,7 +26,14 @@ add_subdirectory(utils "${PROJECT_BINARY_DIR}/utils")
 
 
 # build
-add_executable(Tutorial tutorial.cc)
+
+# add all source files here
+set(SRCFiles
+  tutorial.cc
+  )
+
+
+add_executable(Tutorial ${SRCFiles})
 target_link_libraries(Tutorial Euler)
 target_link_libraries(Tutorial Utils)
 
