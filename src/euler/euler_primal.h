@@ -18,9 +18,6 @@ namespace Ticon{
 // declarations
 
 template <typename Tsol, typename Tmsh, typename Tres>
-void RoeSolver(Tsol* q, Tsol* qg, Tres* aux_vars, Tmsh* nrm, Tres* flux);
-
-template <typename Tsol, typename Tmsh, typename Tres>
 void calcSAT(Tsol* roe_vars, Tsol* dq, Tmsh* nrm, Tres* sat);
 
 
@@ -69,8 +66,8 @@ void RoeSolver(Tsol* q, Tsol* qg, Tres* aux_vars, Tmsh* nrm, Tres* flux)
                                  // where e is the internal energy per unit mass
 
   // The right side of the Roe solver comprises the boundary conditions
-       fac = d1_0/qg[0];
-  auto uR = qg[1]*fac; auto vR = qg[2]*fac;
+  auto fac2 = d1_0/qg[0];  //TODO: was fac
+  auto uR = qg[1]*fac2; auto vR = qg[2]*fac2;
        phi = d0_5*(uR*uR + vR*vR);
   auto HR = gamma*qg[3]*fac - gami*phi; // Total Enthalpy
 

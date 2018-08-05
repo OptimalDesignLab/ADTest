@@ -16,9 +16,27 @@ set(HEADERS
   euler.h
   euler_primal.h
   euler_diff.h
+  euler_codipack.h
+  euler_adept.h
 )
 
 target_link_libraries(Euler INTERFACE Utils)
+
+if (ENABLE_CODIPACK)
+  target_link_libraries(Euler INTERFACE CoDiPack)
+endif()
+
+# CMake doesn't allow an Interface library to link to a non-interface library
+if (ENABLE_ADEPT)
+  #  target_link_libraries(Euler LINK_PUBLIC Adept)
+
+  find_library(Adept_lib NAMES adept PATHS ${ADEPT_DIR}/lib)
+  #  target_link_libraries(Euler INTERFACE Adept_lib)
+  target_include_directories(Euler INTERFACE
+    $<BUILD_INTERFACE:${ADEPT_DIR}/include>
+    $<INSTALL_INTERFACE:${ADEPT_DIR}/include>
+    )
+endif()
 
 # install
 #install(TARGETS Euler DESTINATION lib)

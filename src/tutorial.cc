@@ -1,11 +1,17 @@
 #include <cstdlib>
 #include <iostream>
+#include <vector>
 #include "ADTestConfig.h"
 #include "euler.h"
 #include "utils.h"
 #include "test.h"
 
+#ifdef ENABLE_CODIPACK
+  #include "codi.hpp"
+#endif
+
 using namespace Ticon;
+
 int main(int argc, char* argv[])
 {
 
@@ -57,9 +63,20 @@ int main(int argc, char* argv[])
   Ticon::printArray(std::cout, flux_dotL, 4, 4);
 
   // big test
-  TestAD<double, double, double> testdata(10, 100000);
+  const int numNodesPerElement = 10;
+  const int numEl = 100000;
+  TestAD<double, double, double> testdata(numNodesPerElement, numEl);
   testRoeSolver(testdata);
   testRoeSolver_diff(testdata);
+
+  #ifdef ENABLE_ADEPT
+    testRoeSolver_diff_adept(testdata);
+  #endif
+
+  #ifdef ENABLE_CODIPACK
+//    TestAD<codi::RealForwardVec<8>, double, codi::RealForwardVec<8>> testdata_codi(numNodesPerElement, numEl);
+//    testRoeSolver_diff_codi(testdata_codi);
+  #endif
 
   return 0;
 }

@@ -2,4 +2,7 @@
 #define ADTest_VERSION_MAJOR @ADTest_VERSION_MAJOR@
 #define ADTest_VERSION_MINOR @ADTest_VERSION_MINOR@
 
+#cmakedefine ENABLE_CODIPACK @ENABLE_CODIPACK@
+#cmakedefine ENABLE_ADEPT @ENABLE_ADEPT@
+
 namespace Ticon {}; // declare namespace

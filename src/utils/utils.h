@@ -40,7 +40,7 @@ std::ostream& operator<<(std::ostream& fout, const std::chrono::duration<R, T>& 
   else if (std::chrono::duration_cast<std::chrono::milliseconds>(etime).count() < 1000)
     fout << std::chrono::duration<double, std::milli>(etime).count() << " milliseconds";
   else //if (std::chrono::duration_cast<std::chrono::seconds>(etime).count() < 1000)
-    fout << std::chrono::duration<double, std::ratio<1,1>>(etime).count() << " nanoseconds";
+    fout << std::chrono::duration<double, std::ratio<1,1>>(etime).count() << " seconds";
 
   return fout;
 } // function printEtime

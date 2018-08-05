@@ -67,12 +67,21 @@ TestAD<Tsol, Tmsh, Tres>::TestAD(int _numNodesPerElement, int _numEl)
 } // constructor
 
 
-
+// regular Roe Solver benchmark
 template <typename Tsol, typename Tmsh, typename Tres>
 void testRoeSolver(TestAD<Tsol, Tmsh, Tres>& testdata, std::ostream& fout = std::cout);
 
+// hand differentiated Roe Solver benchmark
 template <typename Tsol, typename Tmsh, typename Tres>
 void testRoeSolver_diff(TestAD<Tsol, Tmsh, Tres>& testdata, std::ostream& fout = std::cout);
+
+// CoDiPack differentiated Roe Solver becnhmark
+template <typename Tsol, typename Tmsh, typename Tres>
+void testRoeSolver_diff_codi(TestAD<Tsol, Tmsh, Tres>& testdata, std::ostream& fout= std::cout);
+
+// Adept differentiated Roe Solver becnhmark
+template <typename Tsol, typename Tmsh, typename Tres>
+void testRoeSolver_diff_adept(TestAD<Tsol, Tmsh, Tres>& testdata, std::ostream& fout= std::cout);
 
 
 //-----------------------------------------------------------------------------
@@ -142,6 +151,82 @@ void testRoeSolver_diff(TestAD<Tsol, Tmsh, Tres>& testdata, std::ostream& fout /
 
   fout << "Roe solver diff elapsed time = " << t2 - t1 << std::endl;  
 }  // function testRoeSolver
+
+
+#ifdef ENABLE_CODIPACK
+
+template <typename Tsol, typename Tmsh, typename Tres>
+void testRoeSolver_diff_codi(TestAD<Tsol, Tmsh, Tres>& testdata, std::ostream& fout /* = std::cout */)
+{
+  auto aux_vars = testdata.aux_vars;
+
+  // call the flux function a bunch of times
+  auto t1 = Clock::now();
+  for (int i=0; i < testdata.numEl; ++i)
+    for (int j=0; j < testdata.numNodesPerElement; ++j)
+    {
+      int indexq = 0;
+      int indexnrm = 0;
+      int indexfluxjac = 0;
+
+
+      auto qL = &(testdata.qL[indexq]);
+      auto qR = &(testdata.qR[indexq]);
+      auto nrm = &(testdata.nrm[indexnrm]);
+      auto fluxjacL = &(testdata.flux_jacL[indexfluxjac]);
+      auto fluxjacR = &(testdata.flux_jacR[indexfluxjac]);
+
+      RoeSolver_diff_codi(qL, qR, aux_vars, nrm, fluxjacL, fluxjacR);
+
+      indexq += testdata.numDofPerNode;
+      indexfluxjac += testdata.numDofPerNode*testdata.numDofPerNode;
+      indexnrm += 2;
+    }
+
+  auto t2 = Clock::now();
+
+  fout << "Roe solver CoDiPack diff elapsed time = " << t2 - t1 << std::endl;  
+}  // function testRoeSolver
+
+#endif // end if ENABLE_CODIPACK
+
+#ifdef ENABLE_ADEPT
+
+#include "adept.h"
+
+template <typename Tsol, typename Tmsh, typename Tres>
+void testRoeSolver_diff_adept(TestAD<Tsol, Tmsh, Tres>& testdata, std::ostream& fout /* = std::cout */)
+{
+//  auto aux_vars = testdata.aux_vars;
+
+  // call the flux function a bunch of times
+  auto t1 = Clock::now();
+  for (int i=0; i < testdata.numEl; ++i)
+    for (int j=0; j < testdata.numNodesPerElement; ++j)
+    {
+      int indexq = 0;
+      int indexnrm = 0;
+      int indexfluxjac = 0;
+
+
+      auto qL = &(testdata.qL[indexq]);
+      auto qR = &(testdata.qR[indexq]);
+      auto nrm = &(testdata.nrm[indexnrm]);
+      auto fluxjacL = &(testdata.flux_jacL[indexfluxjac]);
+      auto fluxjacR = &(testdata.flux_jacR[indexfluxjac]);
+
+      RoeSolver_diff_adept(qL, qR, nrm, fluxjacL, fluxjacR);
+
+      indexq += testdata.numDofPerNode;
+      indexfluxjac += testdata.numDofPerNode*testdata.numDofPerNode;
+      indexnrm += 2;
+    }
+
+  auto t2 = Clock::now();
+
+  fout << "Roe solver Adept diff elapsed time = " << t2 - t1 << std::endl;  
+}  // function testRoeSolver
+#endif
 
 
 } // namespace Ticon

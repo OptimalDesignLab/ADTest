@@ -19,9 +19,12 @@ set (CMAKE_CXX_STANDARD 11)
 # look there for it
 include_directories("${PROJECT_BINARY_DIR}")
 
+
 # include all components of this project
 add_subdirectory(euler "${PROJECT_BINARY_DIR}/euler")
 add_subdirectory(utils "${PROJECT_BINARY_DIR}/utils")
+add_subdirectory(CoDiPack "${PROJECT_BINARY_DIR}/CoDiPack")
+add_subdirectory(Adept "${PROJECT_BINARY_DIR}/Adept")
 
 
 
@@ -34,8 +37,23 @@ set(SRCFiles
 
 
 add_executable(Tutorial ${SRCFiles})
-target_link_libraries(Tutorial Euler)
-target_link_libraries(Tutorial Utils)
+target_link_libraries(Tutorial PUBLIC Euler)
+target_link_libraries(Tutorial PUBLIC Utils)
+
+if (ENABLE_CODIPACK)
+  target_link_libraries(Tutorial PUBLIC CoDiPack)
+endif()
+
+if (ENABLE_ADEPT)
+
+  #  find_library(adept PATHS ${ADEPT_DIR}/lib)
+  target_link_libraries(Tutorial PUBLIC ${ADEPT_DIR}/lib/libadept.so)
+  target_include_directories(Tutorial PUBLIC
+  $<BUILD_INTERFACE:${ADEPT_DIR}/include>
+  $<INSTALL_INTERFACE:${ADEPT_DIR}/include>
+)
+endif()
+
 
 # install
 install(TARGETS Tutorial DESTINATION bin)
