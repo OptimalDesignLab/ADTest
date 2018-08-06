@@ -6,11 +6,13 @@
 #include "utils.h"
 #include "test.h"
 
+
 #ifdef ENABLE_CODIPACK
   #include "codi.hpp"
 #endif
 
 using namespace Ticon;
+
 
 int main(int argc, char* argv[])
 {
@@ -74,8 +76,8 @@ int main(int argc, char* argv[])
   #endif
 
   #ifdef ENABLE_CODIPACK
-//    TestAD<codi::RealForwardVec<8>, double, codi::RealForwardVec<8>> testdata_codi(numNodesPerElement, numEl);
-//    testRoeSolver_diff_codi(testdata_codi);
+    TestAD<codi::RealForwardVec<8>, double, codi::RealForwardVec<8>> testdata_codi(numNodesPerElement, numEl);
+    testRoeSolver_diff_codi(testdata_codi);
   #endif
 
   return 0;

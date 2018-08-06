@@ -150,6 +150,8 @@ void testRoeSolver_diff(TestAD<Tsol, Tmsh, Tres>& testdata, std::ostream& fout /
   auto t2 = Clock::now();
 
   fout << "Roe solver diff elapsed time = " << t2 - t1 << std::endl;  
+  fout << "first jacL = ";
+  printArray(std::cout, &(testdata.flux_jacL[0]), 4, 4);
 }  // function testRoeSolver
 
 
@@ -200,8 +202,13 @@ void testRoeSolver_diff_adept(TestAD<Tsol, Tmsh, Tres>& testdata, std::ostream& 
 //  auto aux_vars = testdata.aux_vars;
 
   // call the flux function a bunch of times
+
+  adept::Stack stack;
+  stack.preallocate_statements(101);
+  stack.preallocate_operations(235);
   auto t1 = Clock::now();
   for (int i=0; i < testdata.numEl; ++i)
+  {
     for (int j=0; j < testdata.numNodesPerElement; ++j)
     {
       int indexq = 0;
@@ -215,16 +222,24 @@ void testRoeSolver_diff_adept(TestAD<Tsol, Tmsh, Tres>& testdata, std::ostream& 
       auto fluxjacL = &(testdata.flux_jacL[indexfluxjac]);
       auto fluxjacR = &(testdata.flux_jacR[indexfluxjac]);
 
-      RoeSolver_diff_adept(qL, qR, nrm, fluxjacL, fluxjacR);
+      stack.new_recording();
+      RoeSolver_diff_adept(stack, qL, qR, nrm, fluxjacL, fluxjacR);
 
       indexq += testdata.numDofPerNode;
       indexfluxjac += testdata.numDofPerNode*testdata.numDofPerNode;
       indexnrm += 2;
     }
+  }
 
   auto t2 = Clock::now();
 
-  fout << "Roe solver Adept diff elapsed time = " << t2 - t1 << std::endl;  
+  fout << "Roe solver Adept diff elapsed time = " << t2 - t1 << std::endl;
+  fout << "first jacL = ";
+  printArray(std::cout, &(testdata.flux_jacL[0]), 4, 4);
+  std::cout << "Stack memory usage: " << stack.memory() << " bytes" << std::endl;
+  std::cout << "Stack num statements: " << stack.n_statements() << std::endl;
+  std::cout << "Stack num operatations: " << stack.n_operations() << std::endl;
+  std::cout << "ADEPT_MULITPASS_SIZE = " << ADEPT_MULTIPASS_SIZE << std::endl;
 }  // function testRoeSolver
 #endif
 

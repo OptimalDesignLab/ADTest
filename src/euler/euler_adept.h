@@ -11,18 +11,19 @@
 namespace Ticon {
 
 template <typename Tsol, typename Tmsh, typename Tres>
-void RoeSolver_diff_adept( Tsol* q, Tsol* qg, Tmsh* nrm,
+void RoeSolver_diff_adept( adept::Stack& stack, Tsol* q, Tsol* qg, Tmsh* nrm,
                            Tres* fluxL_dot, Tres* fluxR_dot)
 {
   // Tsol = Tres should be double, because this function internally handles
   // conversion to the AD datatype
   using adept::adouble;
-  adept::Stack stack;
+//  static adept::Stack stack;
   adouble flux[4];
   adouble _q[4] = {q[0], q[1], q[2], q[3]};
   adouble _qg[4] = {qg[0], qg[1], qg[2], qg[3]};
   adouble aux_vars[0];
 
+  stack.new_recording();
   RoeSolver(_q, _qg, aux_vars, nrm, flux);
 
   stack.independent(_q, 4);

@@ -32,6 +32,8 @@ Tsol calcPressure(Tsol* q);
 //-----------------------------------------------------------------------------
 // definitions of templates functions
 
+#define cdouble Tsol  // datatype for constants, allows easy switching back and
+                      // forth
 
 template <typename Tsol, typename Tmsh, typename Tres>
 void RoeSolver(Tsol* q, Tsol* qg, Tres* aux_vars, Tmsh* nrm, Tres* flux)
@@ -43,41 +45,41 @@ void RoeSolver(Tsol* q, Tsol* qg, Tres* aux_vars, Tmsh* nrm, Tres* flux)
 
   const int numDofPerNode = 4;  // TODO: get from Params
   // Declaring constants
-  double d1_0 = 1.0;
-  double d0_0 = 0.0;
-  double d0_5 = 0.5;
-  double tau = 1.0;
-  double gamma = 1.4;
-  double gami = 0.4;
+  cdouble d1_0 = 1.0;
+  cdouble d0_0 = 0.0;
+  cdouble d0_5 = 0.5;
+  cdouble tau = 1.0;
+  cdouble gamma = 1.4;
+  cdouble gami = 0.4;
 //  gamma = params.gamma
 //  gami = params.gamma_1
-  double sat_fac = 1;  // multiplier for SAT term
+  cdouble sat_fac = 1;  // multiplier for SAT term
 
   // Begin main executuion
-  auto nx = nrm[0];
-  auto ny = nrm[1];
+  Tmsh nx = nrm[0];
+  Tmsh ny = nrm[1];
 
   // Compute the Roe Averaged states
   // The left state of Roe are the actual solution variables
-  auto fac = d1_0/q[0];
-  auto uL = q[1]*fac; auto vL = q[2]*fac;
-  auto phi = d0_5*(uL*uL + vL*vL);
-  auto HL = gamma*q[3]*fac - gami*phi; // Total enthalpy, H = e + 0.5*(u^2 + v^2) + p/rho,
+  Tsol fac = d1_0/q[0];
+  Tsol uL = q[1]*fac; Tsol vL = q[2]*fac;
+  Tsol phi = d0_5*(uL*uL + vL*vL);
+  Tsol HL = gamma*q[3]*fac - gami*phi; // Total enthalpy, H = e + 0.5*(u^2 + v^2) + p/rho,
                                  // where e is the internal energy per unit mass
 
   // The right side of the Roe solver comprises the boundary conditions
-  auto fac2 = d1_0/qg[0];  //TODO: was fac
-  auto uR = qg[1]*fac2; auto vR = qg[2]*fac2;
+       fac = d1_0/qg[0];
+  Tsol uR = qg[1]*fac; Tsol vR = qg[2]*fac;
        phi = d0_5*(uR*uR + vR*vR);
-  auto HR = gamma*qg[3]*fac - gami*phi; // Total Enthalpy
+  Tsol HR = gamma*qg[3]*fac - gami*phi; // Total Enthalpy
 
   // Averaged states
-  auto sqL = std::sqrt(q[0]);
-  auto sqR = std::sqrt(qg[0]);
+  Tsol sqL = sqrt(q[0]);
+  Tsol sqR = sqrt(qg[0]);
        fac = d1_0/(sqL + sqR);
-  auto u = (sqL*uL + sqR*uR)*fac;
-  auto v = (sqL*vL + sqR*vR)*fac;
-  auto H = (sqL*HL + sqR*HR)*fac;
+  Tsol u = (sqL*uL + sqR*uR)*fac;
+  Tsol v = (sqL*vL + sqR*vR)*fac;
+  Tsol H = (sqL*HL + sqR*HR)*fac;
 
 //  dq = params.v_vals2 // zeros(Tsol, 4)
   Tsol dq[MAX_DOFPERNODE];
@@ -86,7 +88,7 @@ void RoeSolver(Tsol* q, Tsol* qg, Tres* aux_vars, Tmsh* nrm, Tres* flux)
 
 //  sat = params.sat_vals
   Tres sat[MAX_DOFPERNODE];
-  Tres roe_vars[2];
+  Tsol roe_vars[3];
 //  roe_vars = params.roe_vars
   roe_vars[0] = u;
   roe_vars[1] = v;
@@ -123,31 +125,31 @@ void calcSAT(Tsol* roe_vars, Tsol* dq, Tmsh* nrm, Tres* sat)
   // SAT parameters
   Tsol sat_Vn = 0.025;
   Tsol sat_Vl = 0.025;
-  double tau = 1.0;
+  cdouble tau = 1.0;
 
-  auto u = roe_vars[0];
-  auto v = roe_vars[1];
-  auto H = roe_vars[2];
+  Tsol u = roe_vars[0];
+  Tsol v = roe_vars[1];
+  Tsol H = roe_vars[2];
 
-  const double gami = 0.4; // TODO: params
+  const cdouble gami = 0.4; // TODO: params
 
   // Begin main executuion
-  auto nx = nrm[0];
-  auto ny = nrm[1];
+  Tmsh nx = nrm[0];
+  Tmsh ny = nrm[1];
 
-  auto dA = std::sqrt(nx*nx + ny*ny);
+  Tmsh dA = sqrt(nx*nx + ny*ny);
 
-  auto Un = u*nx + v*ny; // Normal Velocity
+  Tres Un = u*nx + v*ny; // Normal Velocity
 
-  auto phi = 0.5*(u*u + v*v);
+  Tsol phi = 0.5*(u*u + v*v);
 
-  auto a = std::sqrt(gami*(H - phi)); // speed of sound
+  Tsol a = sqrt(gami*(H - phi)); // speed of sound
 
-  auto lambda1 = Un + dA*a;
-  auto lambda2 = Un - dA*a;
-  auto lambda3 = Un;
+  Tres lambda1 = Un + dA*a;
+  Tres lambda2 = Un - dA*a;
+  Tres lambda3 = Un;
 
-  auto rhoA = absvalue(Un) + dA*a;
+  Tres rhoA = absvalue(Un) + dA*a;
 
   // Compute Eigen Values of the Flux Jacobian
   // The eigen values calculated above cannot be used directly. Near stagnation
@@ -160,10 +162,10 @@ void calcSAT(Tsol* roe_vars, Tsol* dq, Tmsh* nrm, Tres* sat)
   lambda3 = 0.5*(tau*max(absvalue(lambda3),sat_Vl *rhoA) - lambda3);
 
 
-  auto dq1 = dq[0];
-  auto dq2 = dq[1];
-  auto dq3 = dq[2];
-  auto dq4 = dq[3];
+  Tsol dq1 = dq[0];
+  Tsol dq2 = dq[1];
+  Tsol dq3 = dq[2];
+  Tsol dq4 = dq[3];
 
   sat[0] = lambda3*dq1;
   sat[1] = lambda3*dq2;
@@ -190,9 +192,9 @@ void calcSAT(Tsol* roe_vars, Tsol* dq, Tmsh* nrm, Tres* sat)
   E2dq[1] = E2dq[1]*nx;
 
   //-- add to sat
-  auto tmp1 = 0.5*(lambda1 + lambda2) - lambda3;
-  auto tmp2 = gami/(a*a);
-  auto tmp3 = 1.0/(dA*dA);
+  Tres tmp1 = 0.5*(lambda1 + lambda2) - lambda3;
+  Tres tmp2 = gami/(a*a);
+  Tres tmp3 = 1.0/(dA*dA);
 
   for (int i=0; i < numDofPerNode; ++i)
     sat[i] = sat[i] + tmp1*(tmp2*E1dq[i] + tmp3*E2dq[i]);
@@ -228,10 +230,10 @@ void calcEulerFlux (Tsol* q, Tres* aux_vars, Tmsh* dir, Tres* F)
 // 2D  only
 
 
-  auto press = calcPressure(q);
+  Tsol press = calcPressure(q);
 //  press = getPressure(aux_vars)
 //  press = @getPressure(aux_vars)
-  auto U = (q[1]*dir[0] + q[2]*dir[1])/q[0];
+  Tres U = (q[1]*dir[0] + q[2]*dir[1])/q[0];
   F[0] = q[0]*U;
   F[1] = q[1]*U + dir[0]*press;
   F[2] = q[2]*U + dir[1]*press;
@@ -245,7 +247,7 @@ Tsol calcPressure(Tsol* q)
   // calculate pressure for a node
   // q is a vector of length 4 of the conservative variables
 
-  const double gamma_1 = 0.4;
+  const cdouble gamma_1 = 0.4;
   return (gamma_1)*(q[3] - 0.5*(q[1]*q[1] + q[2]*q[2])/q[0]);
 }
 

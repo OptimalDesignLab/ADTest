@@ -5,4 +5,6 @@
 #cmakedefine ENABLE_CODIPACK @ENABLE_CODIPACK@
 #cmakedefine ENABLE_ADEPT @ENABLE_ADEPT@
 
+#define ADEPT_STACK_THREAD_UNSAFE
+
 namespace Ticon {}; // declare namespace
